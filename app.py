@@ -7,7 +7,7 @@ import tempfile
 
 # Initialize the Flask app and configure the database URI
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://sql12748683:s6yfRqETxB@http://sql12.freesqldatabase.com:3306/sql12748683"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://sql12748683:s6yfRqETxB@http://sql12.freesqldatabase.com/sql12748683"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = os.urandom(24)
 
