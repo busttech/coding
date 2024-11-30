@@ -17,7 +17,7 @@ runCodeBtn.addEventListener('click', async (event) => {
         
         // Refresh the page after 3 warnings
         if (warningCoun >= 5) {
-            alert('You have received 3 warnings. The page will now refresh.');
+            alert('You have received 5 warnings. The page will now refresh.');
             window.location.reload(); // Refresh the page
         }
 

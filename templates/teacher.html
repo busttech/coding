@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{url_for('static', filename='teacher.css')}}">
 </head>
 <body>
@@ -13,14 +14,14 @@
             <nav>
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/passedsub/<int:question_id>">submission</a></li>
-                    <li><a href="#">Logout</a></li>
+                    <li><a href="/Allquestions">Submission</a></li>
+                    <li><a href="/logout">Logout</a></li>
                 </ul>
             </nav>
         </div>
     </header>
     <div class="container">
-        <h1>Teacher Dashboard</h1>
+        <h1>Add Question</h1>
         <form id="addQuestionForm">
             <label for="title">Question Title:</label>
             <input type="text" id="title" name="title" required>
@@ -49,3 +50,4 @@
     <script src="{{url_for('static', filename='teacher.js')}}"></script>
 </body>
 </html>
+

@@ -1,20 +1,16 @@
-import os
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 import subprocess
 import sys
+import os
 import tempfile
 
-# Initialize the Flask app and configure the database URI
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://sql12748683:s6yfRqETxB@http://sql12.freesqldatabase.com/sql12748683"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:tarun@localhost/co12'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
 
-# Initialize the SQLAlchemy instance
-db = SQLAlchemy(app)
-
-# Define database models
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -32,15 +28,14 @@ class Submission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_code = db.Column(db.Text, nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
-    result = db.Column(db.Text, nullable=False)
-
+    result = db.Column(db.String, nullable=False)
 class SubmissionAll(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_code = db.Column(db.Text, nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
     result = db.Column(db.String(16), nullable=False)
 
-# Routes and Views
+
 @app.route("/")
 def home():
     return render_template('index.html')
@@ -85,6 +80,10 @@ def teacher():
 def student():
     questions = Question.query.all()
     return render_template('student.html', questions=questions)
+@app.route('/Allquestions')
+def showallquestions():
+    questions = Question.query.all()
+    return render_template('Allquestions.html', questions=questions)
 
 @app.route('/editor/<int:question_id>')
 def editor(question_id):
@@ -138,7 +137,7 @@ def submit_code(question_id):
         submission = Submission(student_code=code, question_id=question_id, result="Passed")
         db.session.add(submission)
         db.session.commit()
-    elif not all_passed:
+    elif not all_passed :
         submissiondsd = SubmissionAll(student_code=code, question_id=question_id, result="Passed" if all_passed else "Failed")
         db.session.add(submissiondsd)
         db.session.commit()
@@ -152,16 +151,16 @@ def view_submissions(question_id):
     submissions = Submission.query.filter_by(question_id=question_id).all()
     has_passed_submission = any(submission.result == 'Passed' for submission in submissions)
     return render_template('submission.html', question=question, submissions=submissions, has_passed_submission=has_passed_submission)
-
 @app.route('/failedsub/<int:question_id>')
 def view_failed_submissions(question_id):
     question = Question.query.get_or_404(question_id)
     submissions = SubmissionAll.query.filter_by(question_id=question_id).all()
     return render_template('submission.html', question=question, submissions=submissions)
-
-# Run the application and create tables if they don't exist
+@app.route('/logout')
+def logout():
+    session['logged_in'] = True
+    return redirect(url_for("login"))
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
