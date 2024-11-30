@@ -11,3 +11,4 @@ packaging==24.1
 Werkzeug==3.0.4
 Flask-SQLAlchemy==3.0.5
 psycopg2-binary==2.9.7
+pymysql==1.0.2
